@@ -17,6 +17,10 @@
         .filter-section { background: white; border-radius: .5rem; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 1.5rem; }
         .btn-admin { background-color: #212529; color: white; }
         .btn-admin:hover { background-color: #000; color: white; }
+
+        @media (min-width: 992px) {
+            .container { max-width: 100%; padding-left: 2rem; padding-right: 2rem; }
+        }
     </style>
     @stack('styles')
 </head>
