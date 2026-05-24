@@ -47,6 +47,20 @@ Route::middleware('auth')->group(function () {
 Route::post('/pago/confirmar', [PaymentController::class, 'confirm'])->name('payment.confirm');
 Route::get('/pago/retorno', [PaymentController::class, 'return'])->name('payment.return');
 
+Route::get('/flow-debug', function () {
+    $log = \App\Helpers\FlowLogger::getContents(500);
+    return '<pre style="background:#1e1e1e;color:#d4d4d4;padding:20px;font-size:12px;line-height:1.5;overflow:auto;max-height:100vh;margin:0;white-space:pre-wrap;">'
+        . htmlspecialchars($log)
+        . '</pre>';
+})->name('flow.debug');
+
+Route::get('/flow-debug', function () {
+    $log = \App\Helpers\FlowLogger::getContents(300);
+    return '<pre style="background:#1e1e1e;color:#d4d4d4;padding:20px;font-size:12px;line-height:1.5;overflow:auto;max-height:100vh;">'
+        . htmlspecialchars($log)
+        . '</pre>';
+})->middleware('auth');
+
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('categories', CategoryController::class);

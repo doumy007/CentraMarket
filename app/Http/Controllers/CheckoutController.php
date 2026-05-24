@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\FlowLogger;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Services\FlowService;
@@ -27,9 +28,16 @@ class CheckoutController extends Controller
 
     public function process(Request $request)
     {
+        FlowLogger::log('CHECKOUT_PROCESS_START', [
+            'session_id' => session()->getId(),
+            'user_id' => auth()->id(),
+            'request_data' => $request->except('_token'),
+        ]);
+
         $cart = $this->getCart();
 
         if (!$cart || $cart->items->isEmpty()) {
+            FlowLogger::log('CHECKOUT_PROCESS_FAIL', 'Cart is empty');
             return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío.');
         }
 
@@ -61,6 +69,13 @@ class CheckoutController extends Controller
             'shipping_number' => $data['shipping_number'],
         ]);
 
+        FlowLogger::log('CHECKOUT_ORDER_CREATED', [
+            'order_id' => $order->id,
+            'order_number' => $order->order_number,
+            'total' => $total,
+            'items_count' => $cart->items->count(),
+        ]);
+
         foreach ($cart->items as $item) {
             $order->items()->create([
                 'product_id' => $item->product_id,
@@ -88,16 +103,25 @@ class CheckoutController extends Controller
                 'email' => $data['shipping_email'],
             ]);
 
+            FlowLogger::log('CHECKOUT_PAYMENT_CREATED', [
+                'payment_url' => $payment['url'] ?? 'MISSING',
+                'payment_token' => $payment['token'] ?? 'MISSING',
+                'flow_order' => $payment['flowOrder'] ?? 'MISSING',
+            ]);
+
             $order->update(['transaction_id' => $payment['token'] ?? null]);
 
             $cart->items()->delete();
 
-            Log::info('Checkout - Redirecting to Flow.cl', [
-                'url' => $payment['url'] ?? 'no url',
-            ]);
+            $redirectUrl = ($payment['url'] ?? '') . '?token=' . ($payment['token'] ?? '');
+            FlowLogger::log('CHECKOUT_REDIRECT', ['url' => $redirectUrl]);
 
-            return redirect($payment['url']);
+            return redirect($redirectUrl);
         } catch (\Exception $e) {
+            FlowLogger::log('CHECKOUT_PAYMENT_FAILED', [
+                'error' => $e->getMessage(),
+                'order_id' => $order->id,
+            ], $e);
             Log::error('Checkout - Payment error', [
                 'error' => $e->getMessage(),
                 'order_id' => $order->id,
@@ -112,12 +136,22 @@ class CheckoutController extends Controller
         $orderId = session('last_order_id');
         $order = $orderId ? Order::find($orderId) : null;
 
+        FlowLogger::log('CHECKOUT_SUCCESS', [
+            'session_order_id' => $orderId,
+            'order_found' => $order ? $order->order_number : 'NO',
+            'order_status' => $order ? $order->status : 'N/A',
+        ]);
+
         return view('checkout.success', compact('order'));
     }
 
     public function cancel()
     {
         $orderId = session('last_order_id');
+        FlowLogger::log('CHECKOUT_CANCEL', [
+            'session_order_id' => $orderId,
+        ]);
+
         if ($orderId) {
             Order::where('id', $orderId)->where('status', 'pending')->update(['status' => 'cancelled']);
         }
