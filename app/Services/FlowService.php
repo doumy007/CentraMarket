@@ -72,8 +72,7 @@ class FlowService
         Log::info('Flow.cl verification request', ['token' => $token]);
 
         $response = Http::withOptions(['verify' => config('flow.ssl_verify')])
-            ->asForm()
-            ->post($this->baseUrl . '/payment/getStatus', $data);
+            ->get($this->baseUrl . '/payment/getStatus', $data);
 
         Log::info('Flow.cl verification response', [
             'status' => $response->status(),
@@ -95,7 +94,10 @@ class FlowService
     {
         unset($data['s']);
         ksort($data);
-        $stringToSign = http_build_query($data);
-        return hash_hmac('sha256', $stringToSign, $this->secretKey);
+        $toSign = '';
+        foreach ($data as $key => $value) {
+            $toSign .= $key . $value;
+        }
+        return hash_hmac('sha256', $toSign, $this->secretKey);
     }
 }
