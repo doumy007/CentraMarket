@@ -17,6 +17,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
+                        <th>Imagen</th>
                         <th>Nombre</th>
                         <th>Categoría</th>
                         <th>Precio Normal</th>
@@ -30,6 +31,13 @@
                     @forelse($products as $p)
                     <tr>
                         <td>{{ $p->id }}</td>
+                        <td>
+                            @if($p->image)
+                                <img src="{{ url('imgProduct/' . $p->image) }}" style="width:50px;height:50px;object-fit:cover;border-radius:.25rem;">
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
+                        </td>
                         <td>{{ $p->name }}</td>
                         <td>{{ $p->category->name }}</td>
                         <td>${{ number_format($p->price, 0, ',', '.') }}</td>
@@ -63,7 +71,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="text-center py-4 text-muted">No hay productos.</td>
+                        <td colspan="9" class="text-center py-4 text-muted">No hay productos.</td>
                     </tr>
                     @endforelse
                 </tbody>

@@ -12,7 +12,7 @@
 
 <div class="card card-dash">
     <div class="card-body">
-        <form method="POST" action="{{ route('admin.products.store') }}">
+        <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="row">
@@ -45,9 +45,10 @@
                     @error('stock')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label class="form-label">URL de Imagen</label>
-                    <input type="url" name="image" class="form-control @error('image') is-invalid @enderror" value="{{ old('image') }}" placeholder="https://...">
-                    @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    <label class="form-label">Imágenes</label>
+                    <input type="file" name="images[]" multiple accept="image/jpeg,image/png,image/gif,image/webp" class="form-control @error('images.*') is-invalid @enderror">
+                    <small class="text-muted">Puedes seleccionar varias imágenes. La primera será la principal.</small>
+                    @error('images.*')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
             </div>
 

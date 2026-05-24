@@ -57,7 +57,7 @@
                             @if($product->hasActivePromotion())
                                 <span class="promo-badge" style="left:.5rem;top:.5rem;font-size:.75rem;padding:.2rem .6rem;">-{{ $product->promotionPercentage() }}%</span>
                             @endif
-                            <img src="{{ $product->image ?? 'https://picsum.photos/seed/default/600/600' }}" class="card-img-top" alt="{{ $product->name }}">
+                            <img src="{{ $product->image ? url('imgProduct/' . $product->image) : 'https://picsum.photos/seed/default/600/600' }}" class="card-img-top" alt="{{ $product->name }}">
                         </div>
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">{{ $product->name }}</h5>

@@ -25,7 +25,7 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-md-2">
-                                    <img src="{{ $item->product->image ?? 'https://picsum.photos/seed/default/200/200' }}" class="img-fluid rounded" style="height:100px;width:100px;object-fit:cover;">
+                                    <img src="{{ $item->product->image ? url('imgProduct/' . $item->product->image) : 'https://picsum.photos/seed/default/200/200' }}" class="img-fluid rounded" style="height:100px;width:100px;object-fit:cover;">
                                 </div>
                                 <div class="col-md-3">
                                     <h6 class="mb-1">{{ $item->product->name }}</h6>

@@ -35,7 +35,7 @@
                 @if($product->hasActivePromotion())
                     <span class="promo-badge">{{ $product->promotionPercentage() }}% OFF</span>
                 @endif
-                <img id="mainImage" src="{{ $product->image ?? 'https://picsum.photos/seed/default/800/800' }}" class="main-img w-100" alt="{{ $product->name }}">
+                <img id="mainImage" src="{{ $product->image ? url('imgProduct/' . $product->image) : 'https://picsum.photos/seed/default/800/800' }}" class="main-img w-100" alt="{{ $product->name }}">
 
                 @php
                     $allImages = collect([$product->image]);
@@ -48,7 +48,7 @@
                 @if($allImages->count() > 1)
                     <div class="d-flex gap-2 mt-3 flex-wrap">
                         @foreach($allImages as $idx => $img)
-                            <img src="{{ $img }}" class="thumb-img {{ $idx === 0 ? 'active' : '' }}" onclick="document.getElementById('mainImage').src=this.src; document.querySelectorAll('.thumb-img').forEach(el=>el.classList.remove('active')); this.classList.add('active');">
+                            <img src="{{ url('imgProduct/' . $img) }}" class="thumb-img {{ $idx === 0 ? 'active' : '' }}" onclick="document.getElementById('mainImage').src=this.src; document.querySelectorAll('.thumb-img').forEach(el=>el.classList.remove('active')); this.classList.add('active');">
                         @endforeach
                     </div>
                 @endif
@@ -157,7 +157,7 @@
                             @if($related->hasActivePromotion())
                                 <span class="promo-badge" style="left:.5rem;top:.5rem;font-size:.75rem;padding:.2rem .6rem;">-{{ $related->promotionPercentage() }}%</span>
                             @endif
-                            <img src="{{ $related->image ?? 'https://picsum.photos/seed/default/600/600' }}" class="card-img-top" alt="{{ $related->name }}">
+                            <img src="{{ $related->image ? url('imgProduct/' . $related->image) : 'https://picsum.photos/seed/default/600/600' }}" class="card-img-top" alt="{{ $related->name }}">
                         </div>
                         <div class="card-body d-flex flex-column">
                             <h6 class="card-title">{{ $related->name }}</h6>

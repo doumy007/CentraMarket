@@ -20,7 +20,7 @@
         @foreach($featuredProducts as $product)
             <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="card product-card h-100">
-                    <img src="{{ $product->image ?? 'https://picsum.photos/seed/default/600/600' }}" class="card-img-top" alt="{{ $product->name }}">
+                    <img src="{{ $product->image ? url('imgProduct/' . $product->image) : 'https://picsum.photos/seed/default/600/600' }}" class="card-img-top" alt="{{ $product->name }}">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ $product->name }}</h5>
                         <p class="card-text small text-muted mb-2">{{ $product->category->name }}</p>

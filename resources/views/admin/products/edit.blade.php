@@ -12,7 +12,7 @@
 
 <div class="card card-dash">
     <div class="card-body">
-        <form method="POST" action="{{ route('admin.products.update', $product) }}">
+        <form method="POST" action="{{ route('admin.products.update', $product) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -46,11 +46,39 @@
                     @error('stock')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label class="form-label">URL de Imagen</label>
-                    <input type="url" name="image" class="form-control @error('image') is-invalid @enderror" value="{{ old('image', $product->image) }}" placeholder="https://...">
-                    @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    <label class="form-label">Nuevas Imágenes</label>
+                    <input type="file" name="images[]" multiple accept="image/jpeg,image/png,image/gif,image/webp" class="form-control @error('images.*') is-invalid @enderror">
+                    <small class="text-muted">Agrega más imágenes. La primera de todas será la principal.</small>
+                    @error('images.*')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
             </div>
+
+            @if($product->images->isNotEmpty())
+            <div class="mb-3">
+                <label class="form-label">Galería actual</label>
+                <div class="d-flex gap-3 flex-wrap">
+                    @foreach($product->images as $img)
+                        <div class="position-relative" style="width:120px;">
+                            <img src="{{ url('imgProduct/' . $img->url) }}" class="img-thumbnail d-block" style="width:120px;height:120px;object-fit:cover;">
+                            <div class="mt-1 d-flex justify-content-between align-items-center">
+                                @if($product->image === $img->url)
+                                    <span class="badge bg-dark" style="font-size:.65rem;">Principal</span>
+                                @else
+                                    <span></span>
+                                @endif
+                                <form action="{{ route('admin.products.images.destroy', [$product, $img]) }}" method="POST" onsubmit="return confirm('¿Eliminar esta imagen?')" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" style="line-height:1;">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
 
             <div class="mb-3">
                 <label class="form-label">Descripción</label>

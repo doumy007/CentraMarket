@@ -54,17 +54,20 @@ Route::get('/flow-debug', function () {
         . '</pre>';
 })->name('flow.debug');
 
-Route::get('/flow-debug', function () {
-    $log = \App\Helpers\FlowLogger::getContents(300);
-    return '<pre style="background:#1e1e1e;color:#d4d4d4;padding:20px;font-size:12px;line-height:1.5;overflow:auto;max-height:100vh;">'
-        . htmlspecialchars($log)
-        . '</pre>';
-})->middleware('auth');
+Route::get('/imgProduct/{filename}', function ($filename) {
+    $path = base_path('imgProduct/' . $filename);
+    if (!file_exists($path)) {
+        abort(404);
+    }
+    return response()->file($path);
+})->where('filename', '.*');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('categories', CategoryController::class);
     Route::resource('products', AdminProductController::class);
+    Route::delete('/productos/{product}/imagenes/{image}', [AdminProductController::class, 'deleteImage'])
+        ->name('products.images.destroy');
     Route::get('/ordenes', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('/ordenes/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::patch('/ordenes/{order}/estado', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
