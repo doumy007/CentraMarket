@@ -51,7 +51,7 @@ class PaymentController extends Controller
                         'order_current_status' => $order->status,
                     ]);
 
-                    if ($paymentStatus['status'] === 1) {
+                    if ($paymentStatus['status'] === 2) {
                         $order->update([
                             'status' => 'paid',
                             'transaction_id' => $token,
@@ -113,7 +113,7 @@ class PaymentController extends Controller
                 'full_response' => $paymentStatus,
             ]);
 
-            if (isset($paymentStatus['status']) && $paymentStatus['status'] === 1) {
+            if (isset($paymentStatus['status']) && $paymentStatus['status'] === 2) {
                 FlowLogger::log('RETURN_SUCCESS', 'Payment confirmed, redirecting to success');
                 return redirect()->route('checkout.success');
             } else {

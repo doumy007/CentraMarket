@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/pago/confirmar', [PaymentController::class, 'confirm'])->name('payment.confirm');
-Route::get('/pago/retorno', [PaymentController::class, 'return'])->name('payment.return');
+Route::match(['GET', 'POST'], '/pago/retorno', [PaymentController::class, 'return'])->name('payment.return');
 
 Route::get('/flow-debug', function () {
     $log = \App\Helpers\FlowLogger::getContents(500);

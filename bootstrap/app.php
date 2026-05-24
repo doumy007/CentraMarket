@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->validateCsrfTokens(except: [
             'pago/confirmar',
+            'pago/retorno',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
