@@ -16,7 +16,7 @@ class FlowLogger
             "[%s] [%s] %s",
             now()->format('Y-m-d H:i:s.u'),
             strtoupper($step),
-            is_string($data) ? $data : json_encode($data, JSON_PRETTY_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+            is_string($data) ? $data : json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
         );
 
         if ($exception) {
