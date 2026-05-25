@@ -54,6 +54,14 @@ Route::get('/flow-debug', function () {
         . '</pre>';
 })->name('flow.debug');
 
+Route::get('/run-migrations/{token}', function ($token) {
+    if ($token !== 'migrate-centra-2026') {
+        abort(403);
+    }
+    $exitCode = Artisan::call('migrate', ['--force' => true]);
+    return '<pre>' . Artisan::output() . '</pre>';
+});
+
 Route::get('/imgProduct/{filename}', function ($filename) {
     $path = base_path('imgProduct/' . $filename);
     if (!file_exists($path)) {
