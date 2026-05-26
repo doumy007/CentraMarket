@@ -47,24 +47,7 @@ Route::middleware('auth')->group(function () {
 Route::post('/pago/confirmar', [PaymentController::class, 'confirm'])->name('payment.confirm');
 Route::match(['GET', 'POST'], '/pago/retorno', [PaymentController::class, 'return'])->name('payment.return');
 
-Route::get('/flow-debug', function () {
-    $log = \App\Helpers\FlowLogger::getContents(500);
-    return '<pre style="background:#1e1e1e;color:#d4d4d4;padding:20px;font-size:12px;line-height:1.5;overflow:auto;max-height:100vh;margin:0;white-space:pre-wrap;">'
-        . htmlspecialchars($log)
-        . '</pre>';
-})->name('flow.debug');
-
-Route::get('/run-migrations/{token}', function ($token) {
-    if ($token !== 'migrate-centra-2026') {
-        abort(403);
-    }
-    $output = '';
-    $exitCode = Artisan::call('migrate', ['--force' => true]);
-    $output .= Artisan::output() . "\n\n";
-    $exitCode2 = Artisan::call('db:seed', ['--force' => true]);
-    $output .= Artisan::output();
-    return '<pre>' . $output . '</pre>';
-});
+{{-- Temporal routes removed after successful migration --}}
 
 Route::get('/imgProduct/{filename}', function ($filename) {
     $path = base_path('imgProduct/' . $filename);
