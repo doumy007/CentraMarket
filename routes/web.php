@@ -58,8 +58,12 @@ Route::get('/run-migrations/{token}', function ($token) {
     if ($token !== 'migrate-centra-2026') {
         abort(403);
     }
+    $output = '';
     $exitCode = Artisan::call('migrate', ['--force' => true]);
-    return '<pre>' . Artisan::output() . '</pre>';
+    $output .= Artisan::output() . "\n\n";
+    $exitCode2 = Artisan::call('db:seed', ['--force' => true]);
+    $output .= Artisan::output();
+    return '<pre>' . $output . '</pre>';
 });
 
 Route::get('/imgProduct/{filename}', function ($filename) {
