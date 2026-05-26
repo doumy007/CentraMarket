@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
 Route::post('/pago/confirmar', [PaymentController::class, 'confirm'])->name('payment.confirm');
 Route::match(['GET', 'POST'], '/pago/retorno', [PaymentController::class, 'return'])->name('payment.return');
 
-{{-- Temporal routes removed after successful migration --}}
+// Temporal routes removed after successful migration
 
 Route::get('/imgProduct/{filename}', function ($filename) {
     $path = base_path('imgProduct/' . $filename);
