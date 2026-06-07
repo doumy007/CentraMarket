@@ -41,6 +41,9 @@
                     <a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
                         <i class="bi bi-box"></i> Productos
                     </a>
+                    <a class="nav-link {{ request()->routeIs('admin.products.import.*') ? 'active' : '' }}" href="{{ route('admin.products.import.form') }}">
+                        <i class="bi bi-upload"></i> Importar/Exportar
+                    </a>
                     <a class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
                         <i class="bi bi-receipt"></i> Órdenes
                     </a>

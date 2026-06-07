@@ -5,9 +5,14 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="mb-0">Productos</h2>
-    <a href="{{ route('admin.products.create') }}" class="btn btn-dark">
-        <i class="bi bi-plus-lg"></i> Nuevo Producto
-    </a>
+    <div class="d-flex gap-2">
+        <a href="{{ route('admin.products.import.form') }}" class="btn btn-outline-dark">
+            <i class="bi bi-upload"></i> Importar/Exportar
+        </a>
+        <a href="{{ route('admin.products.create') }}" class="btn btn-dark">
+            <i class="bi bi-plus-lg"></i> Nuevo Producto
+        </a>
+    </div>
 </div>
 
 <div class="card card-dash">

@@ -60,6 +60,9 @@ Route::get('/imgProduct/{filename}', function ($filename) {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('categories', CategoryController::class);
+    Route::get('/productos/importar', [AdminProductController::class, 'importForm'])->name('products.import.form');
+    Route::post('/productos/importar', [AdminProductController::class, 'importExcel'])->name('products.import');
+    Route::get('/productos/exportar', [AdminProductController::class, 'exportExcel'])->name('products.export');
     Route::resource('products', AdminProductController::class);
     Route::delete('/productos/{product}/imagenes/{image}', [AdminProductController::class, 'deleteImage'])
         ->name('products.images.destroy');
