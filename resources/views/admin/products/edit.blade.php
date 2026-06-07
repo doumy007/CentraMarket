@@ -12,6 +12,34 @@
 
 <div class="card card-dash">
     <div class="card-body">
+        @if($product->images->isNotEmpty())
+        <div class="mb-4">
+            <label class="form-label fw-semibold">Galería actual</label>
+            <div class="d-flex gap-3 flex-wrap">
+                @foreach($product->images as $img)
+                    <div class="position-relative" style="width:120px;">
+                        <img src="{{ url('imgProduct/' . $img->url) }}" class="img-thumbnail d-block" style="width:120px;height:120px;object-fit:cover;">
+                        <div class="mt-1 d-flex justify-content-between align-items-center">
+                            @if($product->image === $img->url)
+                                <span class="badge bg-dark" style="font-size:.65rem;">Principal</span>
+                            @else
+                                <span></span>
+                            @endif
+                            <form action="{{ route('admin.products.images.destroy', [$product, $img]) }}" method="POST" onsubmit="return confirm('¿Eliminar esta imagen?')" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-outline-danger" style="line-height:1;">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <hr>
+        @endif
+
         <form method="POST" action="{{ route('admin.products.update', $product) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -52,33 +80,6 @@
                     @error('images.*')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
             </div>
-
-            @if($product->images->isNotEmpty())
-            <div class="mb-3">
-                <label class="form-label">Galería actual</label>
-                <div class="d-flex gap-3 flex-wrap">
-                    @foreach($product->images as $img)
-                        <div class="position-relative" style="width:120px;">
-                            <img src="{{ url('imgProduct/' . $img->url) }}" class="img-thumbnail d-block" style="width:120px;height:120px;object-fit:cover;">
-                            <div class="mt-1 d-flex justify-content-between align-items-center">
-                                @if($product->image === $img->url)
-                                    <span class="badge bg-dark" style="font-size:.65rem;">Principal</span>
-                                @else
-                                    <span></span>
-                                @endif
-                                <form action="{{ route('admin.products.images.destroy', [$product, $img]) }}" method="POST" onsubmit="return confirm('¿Eliminar esta imagen?')" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" style="line-height:1;">
-                                        <i class="bi bi-x"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            @endif
 
             <div class="mb-3">
                 <label class="form-label">Descripción</label>
