@@ -25,22 +25,34 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $rules = [
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'promotion_price' => 'nullable|numeric|min:0|lt:price',
+            'promotion_price' => 'nullable|numeric|min:0',
             'promotion_active' => 'boolean',
             'promotion_start' => 'nullable|date',
-            'promotion_end' => 'nullable|date|after:promotion_start',
+            'promotion_end' => 'nullable|date',
             'stock' => 'required|integer|min:0',
             'is_active' => 'boolean',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-        ]);
+        ];
 
-        $data['slug'] = Str::slug($data['name']);
+        if ($request->filled('promotion_start') && $request->filled('promotion_end')) {
+            $rules['promotion_end'] = 'nullable|date|after:promotion_start';
+        }
+
+        $data = $request->validate($rules);
+
+        $slug = Str::slug($data['name']);
+        $original = $slug;
+        $counter = 1;
+        while (Product::where('slug', $slug)->exists()) {
+            $slug = $original . '-' . $counter++;
+        }
+        $data['slug'] = $slug;
         $data['promotion_active'] = $request->boolean('promotion_active', false);
         $data['is_active'] = $request->boolean('is_active', true);
 
@@ -61,22 +73,37 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $data = $request->validate([
+        $rules = [
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'promotion_price' => 'nullable|numeric|min:0|lt:price',
+            'promotion_price' => 'nullable|numeric|min:0',
             'promotion_active' => 'boolean',
             'promotion_start' => 'nullable|date',
-            'promotion_end' => 'nullable|date|after:promotion_start',
+            'promotion_end' => 'nullable|date',
             'stock' => 'required|integer|min:0',
             'is_active' => 'boolean',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-        ]);
+        ];
 
-        $data['slug'] = Str::slug($data['name']);
+        if ($request->filled('promotion_start') && $request->filled('promotion_end')) {
+            $rules['promotion_end'] = 'nullable|date|after:promotion_start';
+        }
+
+        $data = $request->validate($rules);
+
+        if ($product->name !== $data['name']) {
+            $slug = Str::slug($data['name']);
+            $original = $slug;
+            $counter = 1;
+            while (Product::where('slug', $slug)->where('id', '!=', $product->id)->exists()) {
+                $slug = $original . '-' . $counter++;
+            }
+            $data['slug'] = $slug;
+        }
+
         $data['promotion_active'] = $request->boolean('promotion_active', false);
         $data['is_active'] = $request->boolean('is_active', true);
 
