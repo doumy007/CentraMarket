@@ -8,14 +8,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body { background-color: #f1f3f5; }
-        .sidebar { background-color: #212529; min-height: 100vh; padding-top: 1rem; }
-        .sidebar .nav-link { color: #adb5bd; padding: .6rem 1rem; border-radius: .25rem; margin: .15rem .5rem; }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: white; background-color: #343a40; }
+        .sidebar { background: linear-gradient(180deg,#1a1a2e 0%,#16213e 100%); min-height: 100vh; padding-top: 1rem; }
+        .sidebar .nav-link { color: #94a3b8; padding: .6rem 1rem; border-radius: .25rem; margin: .15rem .5rem; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: white; background: rgba(255,255,255,.1); }
         .sidebar .nav-link i { margin-right: .5rem; }
         .content-area { padding: 1.5rem; }
-        .card-dash { border: none; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
+        .card-dash { border: none; box-shadow: 0 1px 6px rgba(0,0,0,.06); border-radius: .75rem; }
         .card-dash .card-body { padding: 1.5rem; }
-        .stat-number { font-size: 2rem; font-weight: 700; }
+        .stat-number { font-size: 2rem; font-weight: 700; color: #1a1a2e; }
+        .stat-label { color: #64748b; font-weight: 500; }
+        .btn-primary-custom { background: linear-gradient(135deg,#1a1a2e,#16213e); color: white; border: none; }
+        .btn-primary-custom:hover { background: linear-gradient(135deg,#16213e,#1a1a2e); color: white; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,26,46,.3); }
     </style>
     @stack('styles')
 </head>

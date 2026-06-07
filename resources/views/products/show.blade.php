@@ -16,9 +16,10 @@
     .original-price { text-decoration: line-through; color: #adb5bd; font-size: 1.2rem; }
     .promotion-price { font-size: 2.2rem; font-weight: 800; color: #dc3545; }
     .normal-price { font-size: 2.2rem; font-weight: 800; color: #212529; }
-    .btn-buy { background: #dc3545; color: white; padding: .8rem 2rem; font-size: 1.15rem; font-weight: 700; border: none; border-radius: .5rem; transition: all .2s; }
-    .btn-buy:hover { background: #bb2d3b; color: white; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(220,53,69,.35); }
-    .btn-cart { padding: .8rem 1.5rem; font-size: 1.15rem; border-radius: .5rem; }
+    .btn-buy { background: linear-gradient(135deg,#e63946,#c1121f); color: white; padding: .8rem 2rem; font-size: 1.15rem; font-weight: 700; border: none; border-radius: .5rem; transition: all .3s; }
+    .btn-buy:hover { background: #bb2d3b; color: white; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(230,57,70,.35); }
+    .btn-cart { background: linear-gradient(135deg,#e67e22,#d35400); color: white; padding: .8rem 1.5rem; font-size: 1.15rem; border-radius: .5rem; border: none; font-weight: 700; transition: all .3s; }
+    .btn-cart:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(230,126,34,.35); color: white; }
     .feature-icon { width: 48px; height: 48px; background: #f8f9fa; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #212529; }
 
     /* Lightbox modal */
@@ -119,11 +120,11 @@
             <div class="mb-4 d-flex align-items-center gap-2">
                 <strong>Stock:</strong>
                 @if($product->stock > 10)
-                    <span class="badge bg-success fs-6">{{ $product->stock }} disponibles</span>
+                    <span class="badge badge-available fs-6">{{ $product->stock }} disponibles</span>
                 @elseif($product->stock > 0)
-                    <span class="badge bg-warning text-dark fs-6">Solo {{ $product->stock }} restantes</span>
+                    <span class="badge badge-limited fs-6">Solo {{ $product->stock }} restantes</span>
                 @else
-                    <span class="badge bg-danger fs-6">Agotado</span>
+                    <span class="badge badge-soldout fs-6">Agotado</span>
                 @endif
             </div>
 
