@@ -49,6 +49,14 @@ class CartController extends Controller
             ]);
         }
 
+        session()->flash('pixel_add_to_cart', [
+            'content_ids' => [$product->id],
+            'content_name' => $product->name,
+            'content_type' => 'product',
+            'value' => $product->currentPrice(),
+            'currency' => 'CLP',
+        ]);
+
         return redirect()->route('cart.index')->with('success', 'Producto agregado al carrito.');
     }
 

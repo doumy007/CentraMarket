@@ -2,6 +2,23 @@
 
 @section('title', 'Pago Exitoso')
 
+@if($order)
+@push('pixel_events')
+<script>
+fbq('track', 'Purchase', {
+    value: {{ $order->total }},
+    currency: 'CLP',
+    order_number: '{{ $order->order_number }}',
+    contents: [
+        @foreach($order->items as $item)
+        { id: '{{ $item->product_id }}', quantity: {{ $item->quantity }}, price: {{ $item->price }} },
+        @endforeach
+    ]
+});
+</script>
+@endpush
+@endif
+
 @section('content')
 <div class="container py-5 text-center">
     <div class="mb-4">

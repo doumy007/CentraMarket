@@ -238,6 +238,19 @@
 </div>
 @endsection
 
+@push('pixel_events')
+<script>
+fbq('track', 'ViewContent', {
+    content_ids: ['{{ $product->id }}'],
+    content_name: '{!! addslashes($product->name) !!}',
+    content_category: '{{ $product->category->name }}',
+    content_type: 'product',
+    value: {{ $product->currentPrice() }},
+    currency: 'CLP'
+});
+</script>
+@endpush
+
 @push('scripts')
 <script>
 let currentIndex = 0;
